@@ -1,20 +1,59 @@
 import 'package:flutter/material.dart';
 import '../../config/constants.dart';
-import '../../widgets/custom_button.dart';
+import '../../models/user_model.dart';
+import '../../models/transaction_model.dart';
+import '../../services/auth_service.dart';
+import '../../services/wallet_service.dart';
+import '../../services/transaction_service.dart';
 
-class DashboardScreen extends StatelessWidget {
+class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
 
   @override
+  State<DashboardScreen> createState() => _DashboardScreenState();
+}
+
+class _DashboardScreenState extends State<DashboardScreen> {
+  final _authService = AuthService();
+  final _walletService = WalletService();
+  final _transactionService = TransactionService();
+
+  UserModel? _user;
+  List<TransactionModel> _transactions = [];
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadDashboardData();
+  }
+
+  Future<void> _loadDashboardData() async {
+    final currentUser = _authService._auth.currentUser;
+    if (currentUser != null) {
+      final wallet = await _walletService.getUserWallet(currentUser.uid);
+      final txns = await _transactionService.getTransactions(currentUser.uid);
+
+      setState(() {
+        _user = wallet;
+        _transactions = txns;
+        _isLoading = false;
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
+    if (_isLoading) {
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    }
+
     return Scaffold(
-      backgroundColor: AppColors.background,
       appBar: AppBar(
         backgroundColor: AppColors.primary,
         title:
             const Text("QikiPay Wallet", style: TextStyle(color: Colors.white)),
         centerTitle: true,
-        elevation: 0,
       ),
       body: Padding(
         padding: const EdgeInsets.all(AppPadding.horizontal),
@@ -27,40 +66,20 @@ class DashboardScreen extends StatelessWidget {
               decoration: BoxDecoration(
                 color: AppColors.primary,
                 borderRadius: BorderRadius.circular(16),
-                boxShadow: [
-                  BoxShadow(
-                    color: AppColors.shadow,
-                    blurRadius: 10,
-                    offset: const Offset(0, 6),
-                  )
-                ],
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
-                  Text("Current Balance",
-                      style: TextStyle(color: Colors.white70, fontSize: 14)),
-                  SizedBox(height: 6),
-                  Text("₦25,750.00",
-                      style: TextStyle(
-                          color: Colors.white,
+                children: [
+                  const Text("Current Balance",
+                      style: TextStyle(color: Colors.white70)),
+                  const SizedBox(height: 6),
+                  Text("₦${_user?.balance.toStringAsFixed(2) ?? '0.00'}",
+                      style: const TextStyle(
                           fontSize: 28,
-                          fontWeight: FontWeight.bold)),
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white)),
                 ],
               ),
-            ),
-            const SizedBox(height: 32),
-            const Text("Quick Actions",
-                style: TextStyle(
-                    fontSize: AppFontSizes.title, fontWeight: FontWeight.w600)),
-            const SizedBox(height: 16),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                _ActionTile(icon: Icons.send, label: "Send"),
-                _ActionTile(icon: Icons.account_balance_wallet, label: "Fund"),
-                _ActionTile(icon: Icons.history, label: "History"),
-              ],
             ),
             const SizedBox(height: 32),
             const Text("Recent Transactions",
@@ -68,76 +87,32 @@ class DashboardScreen extends StatelessWidget {
                     fontSize: AppFontSizes.title, fontWeight: FontWeight.w600)),
             const SizedBox(height: 16),
             Expanded(
-              child: ListView(
-                children: const [
-                  _TransactionTile(
-                    label: "Sent to Michael",
-                    amount: "-₦5,000",
-                    isDebit: true,
-                  ),
-                  _TransactionTile(
-                    label: "Wallet Top-up",
-                    amount: "+₦10,000",
-                    isDebit: false,
-                  ),
-                  _TransactionTile(
-                    label: "Electricity Bill",
-                    amount: "-₦2,150",
-                    isDebit: true,
-                  ),
-                ],
+              child: ListView.builder(
+                itemCount: _transactions.length,
+                itemBuilder: (context, index) {
+                  final tx = _transactions[index];
+                  return ListTile(
+                    leading: Icon(
+                      tx.isDebit ? Icons.arrow_upward : Icons.arrow_downward,
+                      color: tx.isDebit ? Colors.red : Colors.green,
+                    ),
+                    title: Text(tx.title),
+                    subtitle: Text(
+                        tx.timestamp.toLocal().toString().split('.').first),
+                    trailing: Text(
+                      (tx.isDebit ? "-" : "+") +
+                          "₦${tx.amount.toStringAsFixed(2)}",
+                      style: TextStyle(
+                          color: tx.isDebit ? Colors.red : Colors.green,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  );
+                },
               ),
-            ),
+            )
           ],
         ),
       ),
-    );
-  }
-}
-
-class _ActionTile extends StatelessWidget {
-  final IconData icon;
-  final String label;
-
-  const _ActionTile({required this.icon, required this.label});
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        CircleAvatar(
-          backgroundColor: AppColors.accent,
-          radius: 28,
-          child: Icon(icon, color: Colors.white),
-        ),
-        const SizedBox(height: 8),
-        Text(label,
-            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500))
-      ],
-    );
-  }
-}
-
-class _TransactionTile extends StatelessWidget {
-  final String label;
-  final String amount;
-  final bool isDebit;
-
-  const _TransactionTile(
-      {required this.label, required this.amount, required this.isDebit});
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      leading: Icon(
-        isDebit ? Icons.arrow_upward : Icons.arrow_downward,
-        color: isDebit ? Colors.red : Colors.green,
-      ),
-      title: Text(label),
-      trailing: Text(amount,
-          style: TextStyle(
-              color: isDebit ? Colors.red : Colors.green,
-              fontWeight: FontWeight.bold)),
     );
   }
 }
