@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../widgets/custom_button.dart';
 import '../../config/constants.dart';
 import 'signup_screen.dart';
+import '../../services/auth_service.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -17,6 +18,9 @@ class _LoginScreenState extends State<LoginScreen>
 
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _authService = AuthService();
+
+  bool _isLoading = false;
 
   @override
   void initState() {
@@ -25,6 +29,28 @@ class _LoginScreenState extends State<LoginScreen>
         vsync: this, duration: const Duration(milliseconds: 800));
     _fadeIn = CurvedAnimation(parent: _controller, curve: Curves.easeInOut);
     _controller.forward();
+  }
+
+  Future<void> _handleLogin() async {
+    setState(() => _isLoading = true);
+
+    final user = await _authService.loginWithEmail(
+      _emailController.text.trim(),
+      _passwordController.text.trim(),
+    );
+
+    setState(() => _isLoading = false);
+
+    if (user != null) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (_) => const DashboardScreen()),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Login failed. Check credentials.')),
+      );
+    }
   }
 
   @override
@@ -49,7 +75,6 @@ class _LoginScreenState extends State<LoginScreen>
                 const SizedBox(height: 20),
                 TextField(
                   controller: _emailController,
-                  keyboardType: TextInputType.emailAddress,
                   decoration: const InputDecoration(
                     labelText: "Email",
                     border: OutlineInputBorder(),
@@ -67,9 +92,8 @@ class _LoginScreenState extends State<LoginScreen>
                 const SizedBox(height: 24),
                 CustomButton(
                   text: "Login",
-                  onPressed: () {
-                    // Firebase Auth logic will come here
-                  },
+                  onPressed: _handleLogin,
+                  isLoading: _isLoading,
                 ),
                 const SizedBox(height: 12),
                 Center(
