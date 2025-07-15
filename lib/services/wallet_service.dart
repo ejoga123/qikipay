@@ -1,23 +1,29 @@
-class UserModel {
-  final String uid;
-  final String email;
-  final double balance;
+import 'package:cloud_firestore/cloud_firestore.dart';
+import '../models/wallet_model.dart';
 
-  UserModel({required this.uid, required this.email, required this.balance});
+class WalletService {
+  final _walletRef = FirebaseFirestore.instance.collection('wallets');
 
-  factory UserModel.fromMap(Map<String, dynamic> map) {
-    return UserModel(
-      uid: map['uid'] ?? '',
-      email: map['email'] ?? '',
-      balance: map['balance']?.toDouble() ?? 0.0,
-    );
+  Future<WalletModel?> getUserWallet(String uid) async {
+    try {
+      final doc = await _walletRef.doc(uid).get();
+      if (!doc.exists) return null;
+
+      return WalletModel.fromJson(doc.data()!);
+    } catch (e) {
+      print('Wallet fetch error: $e');
+      return null;
+    }
   }
 
-  Map<String, dynamic> toMap() {
-    return {
-      'uid': uid,
-      'email': email,
-      'balance': balance,
-    };
+  Future<void> updateWalletBalance(String uid, double newBalance) async {
+    try {
+      await _walletRef.doc(uid).update({
+        'balance': newBalance,
+        'lastUpdated': DateTime.now().toIso8601String(),
+      });
+    } catch (e) {
+      print('Wallet update error: $e');
+    }
   }
 }

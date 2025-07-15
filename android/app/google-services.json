@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "353705145888",
+    "project_id": "qikipay",
+    "storage_bucket": "qikipay.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:353705145888:android:7de9c17af3b0ed4a1fee45",
+        "android_client_info": {
+          "package_name": "com.example.qikipay"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDWYBW5otODz9hAPfD6RH_m1KS4vFCq_WY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

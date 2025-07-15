@@ -1,10 +1,4 @@
 import 'package:flutter/material.dart';
-import '../../config/constants.dart';
-import '../../widgets/custom_button.dart';
-import '../../services/auth_service.dart';
-import '../../services/wallet_service.dart';
-import '../../services/transaction_service.dart';
-import '../../models/transaction_model.dart';
 
 class TopUpScreen extends StatefulWidget {
   const TopUpScreen({super.key});
@@ -14,49 +8,19 @@ class TopUpScreen extends StatefulWidget {
 }
 
 class _TopUpScreenState extends State<TopUpScreen> {
+  final _formKey = GlobalKey<FormState>();
   final _amountController = TextEditingController();
+  String selectedMethod = 'Card';
 
-  final _authService = AuthService();
-  final _walletService = WalletService();
-  final _transactionService = TransactionService();
-
-  bool _isLoading = false;
-
-  Future<void> _topUpWallet() async {
-    final amount = double.tryParse(_amountController.text.trim()) ?? 0;
-    if (amount <= 0) {
+  void _handleTopUp() {
+    if (_formKey.currentState!.validate()) {
+      final amount = double.tryParse(_amountController.text.trim()) ?? 0.0;
+      // TODO: Add top-up logic here
+      print('Top-up ₦$amount via $selectedMethod');
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Enter a valid amount")),
+        SnackBar(content: Text('₦$amount top-up via $selectedMethod')),
       );
-      return;
     }
-
-    setState(() => _isLoading = true);
-
-    final user = _authService._auth.currentUser;
-    if (user == null) return;
-
-    final wallet = await _walletService.getUserWallet(user.uid);
-    final newBalance = (wallet?.balance ?? 0) + amount;
-
-    await _walletService.updateBalance(user.uid, newBalance);
-
-    final transaction = TransactionModel(
-      id: DateTime.now().millisecondsSinceEpoch.toString(),
-      title: "Wallet Top-up",
-      amount: amount,
-      isDebit: false,
-      timestamp: DateTime.now(),
-    );
-
-    await _transactionService.addTransaction(user.uid, transaction);
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text("Wallet funded successfully!")),
-    );
-
-    Navigator.pop(context);
-    setState(() => _isLoading = false);
   }
 
   @override
@@ -68,29 +32,39 @@ class _TopUpScreenState extends State<TopUpScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Fund Wallet")),
+      appBar: AppBar(title: const Text('Top Up Wallet')),
       body: Padding(
-        padding: const EdgeInsets.all(AppPadding.horizontal),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 24),
-            const Text("Amount to Add",
-                style: TextStyle(fontWeight: FontWeight.w600)),
-            const SizedBox(height: 8),
-            TextField(
-              controller: _amountController,
-              keyboardType: TextInputType.number,
-              decoration: const InputDecoration(
-                  border: OutlineInputBorder(), hintText: "₦0.00"),
-            ),
-            const SizedBox(height: 24),
-            CustomButton(
-              text: "Fund Now",
-              onPressed: _topUpWallet,
-              isLoading: _isLoading,
-            ),
-          ],
+        padding: const EdgeInsets.all(16.0),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            children: [
+              TextFormField(
+                controller: _amountController,
+                decoration: const InputDecoration(labelText: 'Amount (₦)'),
+                keyboardType: TextInputType.number,
+                validator: (value) =>
+                    value == null || value.isEmpty ? 'Enter amount' : null,
+              ),
+              const SizedBox(height: 16),
+              DropdownButtonFormField<String>(
+                value: selectedMethod,
+                items: const [
+                  DropdownMenuItem(value: 'Card', child: Text('Card')),
+                  DropdownMenuItem(value: 'Bank', child: Text('Bank Transfer')),
+                  DropdownMenuItem(value: 'USSD', child: Text('USSD')),
+                ],
+                onChanged: (value) => setState(() => selectedMethod = value!),
+                decoration: const InputDecoration(labelText: 'Payment Method'),
+              ),
+              const SizedBox(height: 24),
+              ElevatedButton.icon(
+                onPressed: _handleTopUp,
+                icon: const Icon(Icons.account_balance_wallet),
+                label: const Text('Top Up'),
+              ),
+            ],
+          ),
         ),
       ),
     );

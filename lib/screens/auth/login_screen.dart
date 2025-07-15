@@ -3,6 +3,7 @@ import '../../widgets/custom_button.dart';
 import '../../config/constants.dart';
 import 'signup_screen.dart';
 import '../../services/auth_service.dart';
+import '../home/dashboard_screen.dart'; // Added import
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -67,11 +68,14 @@ class _LoginScreenState extends State<LoginScreen>
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: 40),
-                const Text("Welcome Back 👋",
-                    style: TextStyle(
-                        fontSize: AppFontSizes.headline,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.dark)),
+                const Text(
+                  "Welcome Back 👋",
+                  style: TextStyle(
+                    fontSize: AppFontSizes.headline,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.dark,
+                  ),
+                ),
                 const SizedBox(height: 20),
                 TextField(
                   controller: _emailController,
@@ -89,6 +93,36 @@ class _LoginScreenState extends State<LoginScreen>
                     border: OutlineInputBorder(),
                   ),
                 ),
+                const SizedBox(height: 8),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: TextButton(
+                    onPressed: () async {
+                      final email = _emailController.text.trim();
+                      if (email.isEmpty) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                              content: Text("Please enter your email address")),
+                        );
+                        return;
+                      }
+
+                      try {
+                        await _authService.sendPasswordResetEmail(email);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                              content: Text("Password reset email sent")),
+                        );
+                      } catch (_) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                              content: Text("Failed to send reset email")),
+                        );
+                      }
+                    },
+                    child: const Text("Forgot password?"),
+                  ),
+                ),
                 const SizedBox(height: 24),
                 CustomButton(
                   text: "Login",
@@ -100,13 +134,13 @@ class _LoginScreenState extends State<LoginScreen>
                   child: TextButton(
                     onPressed: () {
                       Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (_) => const SignupScreen()));
+                        context,
+                        MaterialPageRoute(builder: (_) => const SignupScreen()),
+                      );
                     },
                     child: const Text("Don't have an account? Sign up"),
                   ),
-                )
+                ),
               ],
             ),
           ),

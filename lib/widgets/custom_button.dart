@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../widgets/custom_button.dart';
+import 'package:qikipay/screens/auth/signup_screen.dart';
 import '../../config/constants.dart';
 import 'signup_screen.dart';
 

@@ -1,23 +1,38 @@
 class UserModel {
   final String uid;
   final String email;
-  final double balance;
+  final String? displayName;
+  final String? phoneNumber;
+  final String? profileImage;
+  final DateTime? createdAt;
 
-  UserModel({required this.uid, required this.email, required this.balance});
+  UserModel({
+    required this.uid,
+    required this.email,
+    this.displayName,
+    this.phoneNumber,
+    this.profileImage,
+    this.createdAt,
+  });
 
-  factory UserModel.fromMap(Map<String, dynamic> map) {
+  factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
-      uid: map['uid'] ?? '',
-      email: map['email'] ?? '',
-      balance: map['balance']?.toDouble() ?? 0.0,
+      uid: json['uid'],
+      email: json['email'],
+      displayName: json['displayName'],
+      phoneNumber: json['phoneNumber'],
+      profileImage: json['profileImage'],
+      createdAt:
+          json['createdAt'] != null ? DateTime.parse(json['createdAt']) : null,
     );
   }
 
-  Map<String, dynamic> toMap() {
-    return {
-      'uid': uid,
-      'email': email,
-      'balance': balance,
-    };
-  }
+  Map<String, dynamic> toJson() => {
+        'uid': uid,
+        'email': email,
+        'displayName': displayName,
+        'phoneNumber': phoneNumber,
+        'profileImage': profileImage,
+        'createdAt': createdAt?.toIso8601String(),
+      };
 }

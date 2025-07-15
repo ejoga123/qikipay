@@ -1,64 +1,65 @@
 import 'package:flutter/material.dart';
-import '../../config/constants.dart';
-import '../../services/auth_service.dart';
-import '../auth/login_screen.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
-class SettingsScreen extends StatelessWidget {
+class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final User? user = FirebaseAuth.instance.currentUser;
+  State<SettingsScreen> createState() => _SettingsScreenState();
+}
 
+class _SettingsScreenState extends State<SettingsScreen> {
+  bool isDarkMode = false;
+  bool notificationsEnabled = true;
+  String selectedLanguage = 'English';
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Settings")),
-      body: Padding(
-        padding: const EdgeInsets.all(AppPadding.horizontal),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 24),
-            const Text("Profile",
-                style: TextStyle(
-                    fontSize: AppFontSizes.title, fontWeight: FontWeight.bold)),
-            const SizedBox(height: 12),
-            Row(
-              children: [
-                const CircleAvatar(radius: 30, child: Icon(Icons.person)),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(user?.email ?? "user@qikipay.com",
-                          style: const TextStyle(fontWeight: FontWeight.w600)),
-                      const Text("Wallet Owner",
-                          style: TextStyle(color: Colors.grey)),
-                    ],
-                  ),
-                ),
+      appBar: AppBar(title: const Text('Settings')),
+      body: ListView(
+        padding: const EdgeInsets.all(16),
+        children: [
+          SwitchListTile(
+            title: const Text('Dark Mode'),
+            value: isDarkMode,
+            onChanged: (val) => setState(() => isDarkMode = val),
+            secondary: const Icon(Icons.dark_mode),
+          ),
+          SwitchListTile(
+            title: const Text('Enable Notifications'),
+            value: notificationsEnabled,
+            onChanged: (val) => setState(() => notificationsEnabled = val),
+            secondary: const Icon(Icons.notifications_active),
+          ),
+          ListTile(
+            leading: const Icon(Icons.language),
+            title: const Text('Language'),
+            trailing: DropdownButton<String>(
+              value: selectedLanguage,
+              items: const [
+                DropdownMenuItem(value: 'English', child: Text('English')),
+                DropdownMenuItem(value: 'French', child: Text('French')),
+                DropdownMenuItem(value: 'Yoruba', child: Text('Yoruba')),
               ],
+              onChanged: (val) => setState(() => selectedLanguage = val!),
             ),
-            const SizedBox(height: 32),
-            const Text("Account Options",
-                style: TextStyle(
-                    fontSize: AppFontSizes.title, fontWeight: FontWeight.bold)),
-            const SizedBox(height: 12),
-            ListTile(
-              leading: const Icon(Icons.logout, color: Colors.red),
-              title: const Text("Log Out"),
-              onTap: () async {
-                await AuthService().logout();
-                Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (_) => const LoginScreen()),
-                  (route) => false,
-                );
-              },
-            ),
-          ],
-        ),
+          ),
+          const Divider(),
+          ListTile(
+            leading: const Icon(Icons.person),
+            title: const Text('Account Settings'),
+            onTap: () {
+              // TODO: Navigate to profile_screen.dart
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.help_outline),
+            title: const Text('Support'),
+            onTap: () {
+              // TODO: Navigate to support_screen.dart
+            },
+          ),
+        ],
       ),
     );
   }
