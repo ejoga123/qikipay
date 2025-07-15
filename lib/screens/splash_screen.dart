@@ -1,7 +1,6 @@
-import 'package:flutter/material.dart';
 import 'dart:async';
-import '../config/constants.dart';
-import 'auth/login_screen.dart';
+import 'package:flutter/material.dart';
+import 'dashboard_screen.dart'; // Replace with your actual home screen
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -10,26 +9,14 @@ class SplashScreen extends StatefulWidget {
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<double> _scaleAnimation;
-
+class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-
-    _controller =
-        AnimationController(vsync: this, duration: const Duration(seconds: 2));
-    _scaleAnimation =
-        CurvedAnimation(parent: _controller, curve: Curves.easeOut);
-
-    _controller.forward();
-
     Timer(const Duration(seconds: 3), () {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (_) => const LoginScreen()),
+        MaterialPageRoute(builder: (_) => const DashboardScreen()),
       );
     });
   }
@@ -37,34 +24,27 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.primary,
+      backgroundColor: Colors.indigo.shade600,
       body: Center(
-        child: ScaleTransition(
-          scale: _scaleAnimation,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Icon(Icons.account_balance_wallet_rounded,
-                  size: 100, color: Colors.white),
-              const SizedBox(height: 20),
-              const Text("QikiPay",
-                  style: TextStyle(
-                      fontSize: 32,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white)),
-              const SizedBox(height: 10),
-              const Text("Smart. Secure. Seamless.",
-                  style: TextStyle(fontSize: 16, color: Colors.white70)),
-            ],
-          ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(Icons.account_balance_wallet,
+                size: 80, color: Colors.white),
+            const SizedBox(height: 20),
+            const Text(
+              'QikiPay',
+              style: TextStyle(
+                fontSize: 28,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
+            const SizedBox(height: 10),
+            const CircularProgressIndicator(color: Colors.white),
+          ],
         ),
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
   }
 }
