@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import '../../widgets/custom_button.dart';
 import '../../config/constants.dart';
-import 'signup_screen.dart';
 import '../../services/auth_service.dart';
-import '../home/dashboard_screen.dart'; // Added import
+import '../auth/signup_screen.dart';
+import '../home/dashboard_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -14,12 +14,11 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen>
     with TickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<double> _fadeIn;
-
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
-  final _authService = AuthService();
+  late final AnimationController _controller;
+  late final Animation<double> _fadeIn;
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final AuthService _authService = AuthService();
 
   bool _isLoading = false;
 
@@ -27,29 +26,63 @@ class _LoginScreenState extends State<LoginScreen>
   void initState() {
     super.initState();
     _controller = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 800));
+      vsync: this,
+      duration: const Duration(milliseconds: 800),
+    );
     _fadeIn = CurvedAnimation(parent: _controller, curve: Curves.easeInOut);
     _controller.forward();
   }
 
   Future<void> _handleLogin() async {
+    final email = _emailController.text.trim();
+    final password = _passwordController.text.trim();
+
+    if (email.isEmpty || password.isEmpty) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Email and password are required")),
+      );
+      return;
+    }
+
     setState(() => _isLoading = true);
 
-    final user = await _authService.loginWithEmail(
-      _emailController.text.trim(),
-      _passwordController.text.trim(),
-    );
+    final user = await _authService.loginWithEmail(email, password);
 
+    if (!mounted) return;
     setState(() => _isLoading = false);
 
     if (user != null) {
+      if (!mounted) return;
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (_) => const DashboardScreen()),
       );
     } else {
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Login failed. Check credentials.')),
+      );
+    }
+  }
+
+  Future<void> _handlePasswordReset() async {
+    final email = _emailController.text.trim();
+    if (email.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Please enter your email address")),
+      );
+      return;
+    }
+
+    try {
+      await _authService.sendPasswordResetEmail(email);
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Password reset email sent")),
+      );
+    } catch (_) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Failed to send reset email")),
       );
     }
   }
@@ -61,7 +94,7 @@ class _LoginScreenState extends State<LoginScreen>
       body: SafeArea(
         child: FadeTransition(
           opacity: _fadeIn,
-          child: Padding(
+          child: SingleChildScrollView(
             padding:
                 const EdgeInsets.symmetric(horizontal: AppPadding.horizontal),
             child: Column(
@@ -83,6 +116,7 @@ class _LoginScreenState extends State<LoginScreen>
                     labelText: "Email",
                     border: OutlineInputBorder(),
                   ),
+                  keyboardType: TextInputType.emailAddress,
                 ),
                 const SizedBox(height: 16),
                 TextField(
@@ -97,29 +131,7 @@ class _LoginScreenState extends State<LoginScreen>
                 Align(
                   alignment: Alignment.centerRight,
                   child: TextButton(
-                    onPressed: () async {
-                      final email = _emailController.text.trim();
-                      if (email.isEmpty) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                              content: Text("Please enter your email address")),
-                        );
-                        return;
-                      }
-
-                      try {
-                        await _authService.sendPasswordResetEmail(email);
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                              content: Text("Password reset email sent")),
-                        );
-                      } catch (_) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                              content: Text("Failed to send reset email")),
-                        );
-                      }
-                    },
+                    onPressed: _handlePasswordReset,
                     child: const Text("Forgot password?"),
                   ),
                 ),

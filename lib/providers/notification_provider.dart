@@ -2,14 +2,13 @@ import 'package:flutter/material.dart';
 import '../models/notification_model.dart';
 
 class NotificationProvider extends ChangeNotifier {
-  List<NotificationModel> _notifications = [];
-  bool _isLoading = false;
+  final List<NotificationModel> _notifications = [];
 
   List<NotificationModel> get notifications => _notifications;
-  bool get isLoading => _isLoading;
 
   void setNotifications(List<NotificationModel> list) {
-    _notifications = list;
+    _notifications.clear();
+    _notifications.addAll(list);
     notifyListeners();
   }
 
@@ -31,32 +30,10 @@ class NotificationProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> fetchNotifications() async {
-    _isLoading = true;
-    notifyListeners();
-
-    // TODO: Replace with actual fetch logic
-    await Future.delayed(const Duration(seconds: 1));
-    _notifications = [
-      NotificationModel(
-        id: 'n1',
-        title: 'Top-up Successful',
-        body: '₦5,000 has been added to your wallet.',
-        type: 'transaction',
-        timestamp: DateTime.now().subtract(const Duration(minutes: 10)),
-        isRead: false,
-      ),
-      NotificationModel(
-        id: 'n2',
-        title: 'Promo Alert!',
-        body: 'Get 10% cashback on your next transfer.',
-        type: 'promo',
-        timestamp: DateTime.now().subtract(const Duration(hours: 2)),
-        isRead: true,
-      ),
-    ];
-
-    _isLoading = false;
+  void clearAll() {
+    _notifications.clear();
     notifyListeners();
   }
+
+  int get unreadCount => _notifications.where((n) => !n.isRead).length;
 }

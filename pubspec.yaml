@@ -41,6 +41,11 @@ dependencies:
   # Navigation
   go_router: ^14.1.3
 
+  # Additional dependencies to fix errors
+  logger: ^1.1.0
+  http: ^1.4.0
+  qr_flutter: ^4.0.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

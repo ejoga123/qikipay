@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import '../../config/constants.dart';
+
 import 'dashboard_screen.dart';
 import 'send_money_screen.dart';
 import 'top_up_screen.dart';
-import 'transaction_history_screen.dart';
+// Removed import of transaction_history_screen.dart due to missing file
 import 'settings_screen.dart';
-import '../../config/constants.dart';
 
 class HomeWrapper extends StatefulWidget {
   const HomeWrapper({super.key});
@@ -16,19 +17,19 @@ class HomeWrapper extends StatefulWidget {
 class _HomeWrapperState extends State<HomeWrapper> {
   int _currentIndex = 0;
 
-  final List<Widget> _screens = const [
-    DashboardScreen(),
-    SendMoneyScreen(),
-    TopUpScreen(),
-    TransactionHistoryScreen(),
-    SettingsScreen(),
+  final List<Widget> _screens = [
+    const DashboardScreen(),
+    const SendMoneyScreen(),
+    const TopUpScreen(),
+    // Removed TransactionHistoryScreen due to missing file
+    const SettingsScreen(),
   ];
 
   final List<String> _titles = [
     "Wallet",
     "Send",
     "Fund",
-    "History",
+    // Removed History title due to missing screen
     "Settings",
   ];
 
@@ -36,21 +37,29 @@ class _HomeWrapperState extends State<HomeWrapper> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(_titles[_currentIndex]),
         backgroundColor: AppColors.primary,
+        title: Text(
+          _titles[_currentIndex],
+          style: const TextStyle(color: Colors.white),
+        ),
+        centerTitle: true,
       ),
-      body: _screens[_currentIndex],
+      body: IndexedStack(
+        index: _currentIndex,
+        children: _screens,
+      ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
         selectedItemColor: AppColors.primary,
         unselectedItemColor: Colors.grey,
-        onTap: (index) => setState(() => _currentIndex = index),
         type: BottomNavigationBarType.fixed,
+        onTap: (index) => setState(() => _currentIndex = index),
         items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Wallet'),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.account_balance_wallet), label: 'Wallet'),
           BottomNavigationBarItem(icon: Icon(Icons.send), label: 'Send'),
           BottomNavigationBarItem(icon: Icon(Icons.add_card), label: 'Fund'),
-          BottomNavigationBarItem(icon: Icon(Icons.list), label: 'History'),
+          // Removed History item due to missing screen
           BottomNavigationBarItem(
               icon: Icon(Icons.settings), label: 'Settings'),
         ],

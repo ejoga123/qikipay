@@ -1,0 +1,26 @@
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+=======
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+// Import Firebase options for proper initialization on web
+import 'firebase_options.dart';
+
+>>>>>>> REPLACE
+<<<<<<< SEARCH
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(const QikiPayApp());
+}
+=======
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  runApp(const QikiPayApp());
+}

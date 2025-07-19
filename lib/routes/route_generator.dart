@@ -7,8 +7,6 @@ import 'route_names.dart';
 
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
-    final args = settings.arguments;
-
     switch (settings.name) {
       case RouteNames.login:
         return MaterialPageRoute(builder: (_) => const LoginScreen());
@@ -21,9 +19,9 @@ class RouteGenerator {
 
       // Example with arguments
       // case RouteNames.profile:
-      //   if (args is String) {
+      //   if (settings.arguments is String) {
       //     return MaterialPageRoute(
-      //       builder: (_) => ProfileScreen(userId: args),
+      //       builder: (_) => ProfileScreen(userId: settings.arguments as String),
       //     );
       //   }
       //   return _errorRoute();

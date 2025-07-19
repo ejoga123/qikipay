@@ -13,10 +13,11 @@ class WalletModel {
 
   factory WalletModel.fromJson(Map<String, dynamic> json) {
     return WalletModel(
-      uid: json['uid'],
-      balance: json['balance'],
-      currency: json['currency'],
-      lastUpdated: DateTime.parse(json['lastUpdated']),
+      uid: json['uid'] ?? '',
+      balance: (json['balance'] ?? 0).toDouble(),
+      currency: json['currency'] ?? 'NGN',
+      lastUpdated:
+          DateTime.tryParse(json['lastUpdated'] ?? '') ?? DateTime.now(),
     );
   }
 
@@ -26,4 +27,18 @@ class WalletModel {
         'currency': currency,
         'lastUpdated': lastUpdated.toIso8601String(),
       };
+
+  WalletModel copyWith({
+    String? uid,
+    double? balance,
+    String? currency,
+    DateTime? lastUpdated,
+  }) {
+    return WalletModel(
+      uid: uid ?? this.uid,
+      balance: balance ?? this.balance,
+      currency: currency ?? this.currency,
+      lastUpdated: lastUpdated ?? this.lastUpdated,
+    );
+  }
 }

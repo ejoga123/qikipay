@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 class DeviceUtils {
   static bool get isWeb => kIsWeb;
   static bool get isMobile => !kIsWeb && (Platform.isAndroid || Platform.isIOS);
-  static bool get isTablet(BuildContext context) {
+  static bool isTablet(BuildContext context) {
     final shortestSide = MediaQuery.of(context).size.shortestSide;
     return shortestSide >= 600;
   }

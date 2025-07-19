@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../services/auth_service.dart'; // Ensure this exists
 
 class PasswordResetScreen extends StatefulWidget {
   const PasswordResetScreen({super.key});
@@ -10,21 +11,30 @@ class PasswordResetScreen extends StatefulWidget {
 class _PasswordResetScreenState extends State<PasswordResetScreen> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
+  final AuthService _authService = AuthService();
+
   bool isLoading = false;
 
-  void _handleReset() {
+  Future<void> _handleReset() async {
     if (_formKey.currentState!.validate()) {
       setState(() => isLoading = true);
 
-      // TODO: Add Firebase password reset logic here
-      Future.delayed(const Duration(seconds: 2), () {
-        setState(() => isLoading = false);
+      try {
+        await _authService.sendPasswordResetEmail(_emailController.text.trim());
+        if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-              content: Text('Password reset link sent to your email')),
+          const SnackBar(content: Text('Reset link sent to your email')),
         );
-        Navigator.pop(context); // Return to login or previous screen
-      });
+        Navigator.pop(context);
+      } catch (e) {
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to send reset link: $e')),
+        );
+      }
+
+      if (!mounted) return;
+      setState(() => isLoading = false);
     }
   }
 
@@ -42,8 +52,9 @@ class _PasswordResetScreenState extends State<PasswordResetScreen> {
         padding: const EdgeInsets.all(24.0),
         child: Form(
           key: _formKey,
-          child: Column(
+          child: ListView(
             children: [
+              const SizedBox(height: 32),
               const Text(
                 'Forgot your password?',
                 style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
@@ -56,7 +67,10 @@ class _PasswordResetScreenState extends State<PasswordResetScreen> {
               const SizedBox(height: 32),
               TextFormField(
                 controller: _emailController,
-                decoration: const InputDecoration(labelText: 'Email'),
+                decoration: const InputDecoration(
+                  labelText: 'Email',
+                  border: OutlineInputBorder(),
+                ),
                 keyboardType: TextInputType.emailAddress,
                 validator: (value) => value != null && value.contains('@')
                     ? null
@@ -64,7 +78,7 @@ class _PasswordResetScreenState extends State<PasswordResetScreen> {
               ),
               const SizedBox(height: 32),
               isLoading
-                  ? const CircularProgressIndicator()
+                  ? const Center(child: CircularProgressIndicator())
                   : ElevatedButton.icon(
                       onPressed: _handleReset,
                       icon: const Icon(Icons.email),

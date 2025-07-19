@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../config/constants.dart';
-import '../../models/user_model.dart';
+import '../../models/wallet_model.dart';
 import '../../models/transaction_model.dart';
 import '../../services/auth_service.dart';
 import '../../services/wallet_service.dart';
@@ -14,11 +14,11 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
-  final _authService = AuthService();
-  final _walletService = WalletService();
-  final _transactionService = TransactionService();
+  final AuthService _authService = AuthService();
+  final WalletService _walletService = WalletService();
+  final TransactionService _transactionService = TransactionService();
 
-  UserModel? _user;
+  WalletModel? _wallet;
   List<TransactionModel> _transactions = [];
   bool _isLoading = true;
 
@@ -29,13 +29,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   Future<void> _loadDashboardData() async {
-    final currentUser = _authService._auth.currentUser;
+    final currentUser = _authService
+        .currentUser; // Use getter instead of accessing _auth directly
     if (currentUser != null) {
       final wallet = await _walletService.getUserWallet(currentUser.uid);
-      final txns = await _transactionService.getTransactions(currentUser.uid);
-
+      final txns =
+          await _transactionService.getUserTransactions(currentUser.uid);
       setState(() {
-        _user = wallet;
+        _wallet = wallet;
         _transactions = txns;
         _isLoading = false;
       });
@@ -73,43 +74,55 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   const Text("Current Balance",
                       style: TextStyle(color: Colors.white70)),
                   const SizedBox(height: 6),
-                  Text("₦${_user?.balance.toStringAsFixed(2) ?? '0.00'}",
-                      style: const TextStyle(
-                          fontSize: 28,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white)),
+                  Text(
+                    "₦${_wallet?.balance.toStringAsFixed(2) ?? '0.00'}",
+                    style: const TextStyle(
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
                 ],
               ),
             ),
             const SizedBox(height: 32),
-            const Text("Recent Transactions",
-                style: TextStyle(
-                    fontSize: AppFontSizes.title, fontWeight: FontWeight.w600)),
+            const Text(
+              "Recent Transactions",
+              style: TextStyle(
+                fontSize: AppFontSizes.title,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
             const SizedBox(height: 16),
             Expanded(
-              child: ListView.builder(
-                itemCount: _transactions.length,
-                itemBuilder: (context, index) {
-                  final tx = _transactions[index];
-                  return ListTile(
-                    leading: Icon(
-                      tx.isDebit ? Icons.arrow_upward : Icons.arrow_downward,
-                      color: tx.isDebit ? Colors.red : Colors.green,
+              child: _transactions.isEmpty
+                  ? const Center(child: Text("No transactions yet."))
+                  : ListView.builder(
+                      itemCount: _transactions.length,
+                      itemBuilder: (context, index) {
+                        final tx = _transactions[index];
+                        return ListTile(
+                          leading: Icon(
+                            tx.isDebit
+                                ? Icons.arrow_upward
+                                : Icons.arrow_downward,
+                            color: tx.isDebit ? Colors.red : Colors.green,
+                          ),
+                          title: Text(tx.title),
+                          subtitle: Text(
+                            tx.timestamp.toLocal().toString().split('.').first,
+                          ),
+                          trailing: Text(
+                            "${tx.isDebit ? '-' : '+'}₦${tx.amount.toStringAsFixed(2)}",
+                            style: TextStyle(
+                              color: tx.isDebit ? Colors.red : Colors.green,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        );
+                      },
                     ),
-                    title: Text(tx.title),
-                    subtitle: Text(
-                        tx.timestamp.toLocal().toString().split('.').first),
-                    trailing: Text(
-                      (tx.isDebit ? "-" : "+") +
-                          "₦${tx.amount.toStringAsFixed(2)}",
-                      style: TextStyle(
-                          color: tx.isDebit ? Colors.red : Colors.green,
-                          fontWeight: FontWeight.bold),
-                    ),
-                  );
-                },
-              ),
-            )
+            ),
           ],
         ),
       ),

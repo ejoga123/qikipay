@@ -17,11 +17,11 @@ class NotificationModel {
 
   factory NotificationModel.fromJson(Map<String, dynamic> json) {
     return NotificationModel(
-      id: json['id'],
-      title: json['title'],
-      body: json['body'],
-      type: json['type'],
-      timestamp: DateTime.parse(json['timestamp']),
+      id: json['id'] ?? '',
+      title: json['title'] ?? '',
+      body: json['body'] ?? '',
+      type: json['type'] ?? 'general',
+      timestamp: DateTime.tryParse(json['timestamp'] ?? '') ?? DateTime.now(),
       isRead: json['isRead'] ?? false,
     );
   }
@@ -34,4 +34,22 @@ class NotificationModel {
         'timestamp': timestamp.toIso8601String(),
         'isRead': isRead,
       };
+
+  NotificationModel copyWith({
+    String? id,
+    String? title,
+    String? body,
+    String? type,
+    DateTime? timestamp,
+    bool? isRead,
+  }) {
+    return NotificationModel(
+      id: id ?? this.id,
+      title: title ?? this.title,
+      body: body ?? this.body,
+      type: type ?? this.type,
+      timestamp: timestamp ?? this.timestamp,
+      isRead: isRead ?? this.isRead,
+    );
+  }
 }

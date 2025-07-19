@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../../widgets/custom_button.dart';
 import '../../config/constants.dart';
 import '../../services/auth_service.dart';
-import 'login_screen.dart';
+import '../home/dashboard_screen.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -13,13 +13,13 @@ class SignupScreen extends StatefulWidget {
 
 class _SignupScreenState extends State<SignupScreen>
     with TickerProviderStateMixin {
-  late AnimationController _fadeController;
-  late Animation<double> _fadeAnimation;
+  late final AnimationController _fadeController;
+  late final Animation<double> _fadeAnimation;
 
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
-  final _confirmController = TextEditingController();
-  final _authService = AuthService();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmController = TextEditingController();
+  final AuthService _authService = AuthService();
 
   bool _isLoading = false;
 
@@ -27,14 +27,37 @@ class _SignupScreenState extends State<SignupScreen>
   void initState() {
     super.initState();
     _fadeController = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 600));
+      vsync: this,
+      duration: const Duration(milliseconds: 600),
+    );
     _fadeAnimation =
         CurvedAnimation(parent: _fadeController, curve: Curves.easeInOut);
     _fadeController.forward();
   }
 
   Future<void> _handleSignup() async {
-    if (_passwordController.text != _confirmController.text) {
+    final email = _emailController.text.trim();
+    final password = _passwordController.text.trim();
+    final confirmPassword = _confirmController.text.trim();
+
+    if (email.isEmpty || password.isEmpty || confirmPassword.isEmpty) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("All fields are required")),
+      );
+      return;
+    }
+
+    if (!email.contains('@')) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Enter a valid email address")),
+      );
+      return;
+    }
+
+    if (password != confirmPassword) {
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Passwords do not match")),
       );
@@ -43,24 +66,35 @@ class _SignupScreenState extends State<SignupScreen>
 
     setState(() => _isLoading = true);
 
-    final user = await _authService.registerWithEmail(
-      _emailController.text.trim(),
-      _passwordController.text.trim(),
-    );
+    final user = await _authService.registerWithEmail(email, password);
 
+    if (!mounted) return;
     setState(() => _isLoading = false);
 
     if (user != null) {
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Account created successfully!')),
+        const SnackBar(content: Text("Account created successfully!")),
       );
       Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (_) => const DashboardScreen()));
+        context,
+        MaterialPageRoute(builder: (_) => const DashboardScreen()),
+      );
     } else {
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Sign-up failed. Try again.')),
+        const SnackBar(content: Text("Sign-up failed. Try again.")),
       );
     }
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    _confirmController.dispose();
+    _fadeController.dispose();
+    super.dispose();
   }
 
   @override
@@ -76,11 +110,14 @@ class _SignupScreenState extends State<SignupScreen>
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text("Create Account 📝",
-                    style: TextStyle(
-                        fontSize: AppFontSizes.headline,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.dark)),
+                const Text(
+                  "Create Account 📝",
+                  style: TextStyle(
+                    fontSize: AppFontSizes.headline,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.dark,
+                  ),
+                ),
                 const SizedBox(height: 24),
                 TextField(
                   controller: _emailController,
@@ -117,9 +154,7 @@ class _SignupScreenState extends State<SignupScreen>
                 const SizedBox(height: 12),
                 Center(
                   child: TextButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
+                    onPressed: () => Navigator.pop(context),
                     child: const Text("Already have an account? Log in"),
                   ),
                 )
@@ -129,14 +164,5 @@ class _SignupScreenState extends State<SignupScreen>
         ),
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    _emailController.dispose();
-    _passwordController.dispose();
-    _confirmController.dispose();
-    _fadeController.dispose();
-    super.dispose();
   }
 }

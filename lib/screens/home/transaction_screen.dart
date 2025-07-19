@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../services/transaction_service.dart';
 import '../../models/transaction_model.dart';
-import '../../widgets/transaction_item.dart';
-import '../../widgets/transaction_title.dart';
 
 class TransactionsScreen extends StatefulWidget {
   const TransactionsScreen({super.key});
@@ -47,10 +45,19 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         if (index == 0 || _isNewDateGroup(index))
-                          TransactionTitle(
-                            label: _formatDate(tx.timestamp),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 8.0),
+                            child: Text(
+                              _formatDate(tx.timestamp),
+                              style: const TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.bold),
+                            ),
                           ),
-                        TransactionItem(transaction: tx),
+                        ListTile(
+                          title: Text(tx.title),
+                          subtitle: Text(tx.amount.toString()),
+                          trailing: Text(tx.status ?? ''),
+                        ),
                         const Divider(),
                       ],
                     );
