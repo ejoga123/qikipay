@@ -30,8 +30,10 @@ class _SignupScreenState extends State<SignupScreen>
       vsync: this,
       duration: const Duration(milliseconds: 600),
     );
-    _fadeAnimation =
-        CurvedAnimation(parent: _fadeController, curve: Curves.easeInOut);
+    _fadeAnimation = CurvedAnimation(
+      parent: _fadeController,
+      curve: Curves.easeInOut,
+    );
     _fadeController.forward();
   }
 
@@ -72,7 +74,6 @@ class _SignupScreenState extends State<SignupScreen>
     setState(() => _isLoading = false);
 
     if (user != null) {
-      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Account created successfully!")),
       );
@@ -81,7 +82,6 @@ class _SignupScreenState extends State<SignupScreen>
         MaterialPageRoute(builder: (_) => const DashboardScreen()),
       );
     } else {
-      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Sign-up failed. Try again.")),
       );
@@ -102,15 +102,17 @@ class _SignupScreenState extends State<SignupScreen>
     return Scaffold(
       backgroundColor: AppColors.background,
       body: SafeArea(
-        child: FadeTransition(
-          opacity: _fadeAnimation,
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(
-                horizontal: AppPadding.horizontal, vertical: 48),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppPadding.horizontal,
+            vertical: 48,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              FadeTransition(
+                opacity: _fadeAnimation,
+                child: const Text(
                   "Create Account 📝",
                   style: TextStyle(
                     fontSize: AppFontSizes.headline,
@@ -118,48 +120,57 @@ class _SignupScreenState extends State<SignupScreen>
                     color: AppColors.dark,
                   ),
                 ),
-                const SizedBox(height: 24),
-                TextField(
-                  controller: _emailController,
-                  keyboardType: TextInputType.emailAddress,
-                  decoration: const InputDecoration(
-                    labelText: "Email",
-                    border: OutlineInputBorder(),
+              ),
+              const SizedBox(height: 24),
+              TextField(
+                controller: _emailController,
+                keyboardType: TextInputType.emailAddress,
+                style: const TextStyle(color: Colors.black),
+                decoration: const InputDecoration(
+                  labelText: "Email",
+                  labelStyle: TextStyle(color: Colors.grey),
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              const SizedBox(height: 16),
+              TextField(
+                controller: _passwordController,
+                obscureText: true,
+                style: const TextStyle(color: Colors.black),
+                decoration: const InputDecoration(
+                  labelText: "Password",
+                  labelStyle: TextStyle(color: Colors.grey),
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              const SizedBox(height: 16),
+              TextField(
+                controller: _confirmController,
+                obscureText: true,
+                style: const TextStyle(color: Colors.black),
+                decoration: const InputDecoration(
+                  labelText: "Confirm Password",
+                  labelStyle: TextStyle(color: Colors.grey),
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              const SizedBox(height: 24),
+              CustomButton(
+                text: "Sign Up",
+                onPressed: _handleSignup,
+                isLoading: _isLoading,
+              ),
+              const SizedBox(height: 12),
+              Center(
+                child: TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text(
+                    "Already have an account? Log in",
+                    style: TextStyle(color: AppColors.dark),
                   ),
                 ),
-                const SizedBox(height: 16),
-                TextField(
-                  controller: _passwordController,
-                  obscureText: true,
-                  decoration: const InputDecoration(
-                    labelText: "Password",
-                    border: OutlineInputBorder(),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                TextField(
-                  controller: _confirmController,
-                  obscureText: true,
-                  decoration: const InputDecoration(
-                    labelText: "Confirm Password",
-                    border: OutlineInputBorder(),
-                  ),
-                ),
-                const SizedBox(height: 24),
-                CustomButton(
-                  text: "Sign Up",
-                  onPressed: _handleSignup,
-                  isLoading: _isLoading,
-                ),
-                const SizedBox(height: 12),
-                Center(
-                  child: TextButton(
-                    onPressed: () => Navigator.pop(context),
-                    child: const Text("Already have an account? Log in"),
-                  ),
-                )
-              ],
-            ),
+              )
+            ],
           ),
         ),
       ),

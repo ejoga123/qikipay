@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 class AppColors {
   static const Color primary = Color(0xFF4A90E2); // QikiPay Blue
   static const Color accent = Color(0xFF00C6AE); // Teal accent
-  static const Color background = Color(0xFFF6F9FC); // Light backdrop
+  static const Color background =
+      Color(0xCCF6F9FC); // Light backdrop with transparency
   static const Color dark = Color(0xFF2C3E50); // Headline text
   static const Color error = Color(0xFFD32F2F); // Error red
   static const Color success = Color(0xFF4CAF50); // Success green
