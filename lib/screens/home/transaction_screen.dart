@@ -20,7 +20,7 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
   }
 
   Future<void> loadTransactions() async {
-    const uid = 'user123'; // Replace with actual user ID
+    const uid = ''; // Replace with actual user ID
     final txList = await TransactionService().getUserTransactions(uid);
     setState(() {
       transactions = txList;

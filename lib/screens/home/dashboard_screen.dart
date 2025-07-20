@@ -105,7 +105,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     context,
                     icon: Icons.send,
                     label: 'Send Money',
-                    onTap: () {},
                   ),
                 ),
                 InkWell(
@@ -120,7 +119,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     context,
                     icon: Icons.call_received,
                     label: 'Receive Money',
-                    onTap: () {},
                   ),
                 ),
                 InkWell(
@@ -135,7 +133,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     context,
                     icon: Icons.add_card,
                     label: 'Top Up',
-                    onTap: () {},
                   ),
                 ),
                 InkWell(
@@ -146,7 +143,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     context,
                     icon: Icons.receipt_long,
                     label: 'Pay Bills',
-                    onTap: () {},
                   ),
                 ),
               ],
@@ -196,22 +192,17 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   Widget _buildQuickAction(BuildContext context,
-      {required IconData icon,
-      required String label,
-      required VoidCallback onTap}) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Column(
-        children: [
-          CircleAvatar(
-            radius: 28,
-            backgroundColor: AppColors.primary,
-            child: Icon(icon, color: Colors.white, size: 28),
-          ),
-          const SizedBox(height: 8),
-          Text(label, style: const TextStyle(fontWeight: FontWeight.w600)),
-        ],
-      ),
+      {required IconData icon, required String label}) {
+    return Column(
+      children: [
+        CircleAvatar(
+          radius: 28,
+          backgroundColor: AppColors.primary,
+          child: Icon(icon, color: Colors.white, size: 28),
+        ),
+        const SizedBox(height: 8),
+        Text(label, style: const TextStyle(fontWeight: FontWeight.w600)),
+      ],
     );
   }
 }

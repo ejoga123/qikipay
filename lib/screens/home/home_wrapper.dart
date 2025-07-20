@@ -4,8 +4,9 @@ import '../../config/constants.dart';
 import 'dashboard_screen.dart';
 import 'send_money_screen.dart';
 import 'top_up_screen.dart';
-// Removed import of transaction_history_screen.dart due to missing file
 import 'settings_screen.dart';
+import 'profile_screen.dart';
+import 'support_screen.dart';
 
 class HomeWrapper extends StatefulWidget {
   const HomeWrapper({super.key});
@@ -21,7 +22,8 @@ class _HomeWrapperState extends State<HomeWrapper> {
     const DashboardScreen(),
     const SendMoneyScreen(),
     const TopUpScreen(),
-    // Removed TransactionHistoryScreen due to missing file
+    const ProfileScreen(userName: '', email: ''),
+    const SupportScreen(),
     const SettingsScreen(),
   ];
 
@@ -29,7 +31,9 @@ class _HomeWrapperState extends State<HomeWrapper> {
     "Wallet",
     "Send",
     "Fund",
-    // Removed History title due to missing screen
+    "History",
+    "Profile",
+    "Support",
     "Settings",
   ];
 
@@ -59,7 +63,10 @@ class _HomeWrapperState extends State<HomeWrapper> {
               icon: Icon(Icons.account_balance_wallet), label: 'Wallet'),
           BottomNavigationBarItem(icon: Icon(Icons.send), label: 'Send'),
           BottomNavigationBarItem(icon: Icon(Icons.add_card), label: 'Fund'),
-          // Removed History item due to missing screen
+          BottomNavigationBarItem(icon: Icon(Icons.history), label: 'History'),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.support_agent), label: 'Support'),
           BottomNavigationBarItem(
               icon: Icon(Icons.settings), label: 'Settings'),
         ],
