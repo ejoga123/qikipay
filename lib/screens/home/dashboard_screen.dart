@@ -6,6 +6,8 @@ import '../../services/auth_service.dart';
 import '../../services/wallet_service.dart';
 import '../../services/transaction_service.dart';
 import 'send_money_screen.dart';
+import 'receive_money.dart';
+import 'top_up_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -86,6 +88,69 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ],
               ),
             ),
+            const SizedBox(height: 24),
+            // Quick Actions Section
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                InkWell(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const SendMoneyScreen()),
+                    );
+                  },
+                  child: _buildQuickAction(
+                    context,
+                    icon: Icons.send,
+                    label: 'Send Money',
+                    onTap: () {},
+                  ),
+                ),
+                InkWell(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const ReceiveMoneyScreen()),
+                    );
+                  },
+                  child: _buildQuickAction(
+                    context,
+                    icon: Icons.call_received,
+                    label: 'Receive Money',
+                    onTap: () {},
+                  ),
+                ),
+                InkWell(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const TopUpScreen()),
+                    );
+                  },
+                  child: _buildQuickAction(
+                    context,
+                    icon: Icons.add_card,
+                    label: 'Top Up',
+                    onTap: () {},
+                  ),
+                ),
+                InkWell(
+                  onTap: () {
+                    // TODO: Implement Pay Bills screen navigation
+                  },
+                  child: _buildQuickAction(
+                    context,
+                    icon: Icons.receipt_long,
+                    label: 'Pay Bills',
+                    onTap: () {},
+                  ),
+                ),
+              ],
+            ),
             const SizedBox(height: 32),
             const Text(
               "Recent Transactions",
@@ -126,6 +191,26 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildQuickAction(BuildContext context,
+      {required IconData icon,
+      required String label,
+      required VoidCallback onTap}) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Column(
+        children: [
+          CircleAvatar(
+            radius: 28,
+            backgroundColor: AppColors.primary,
+            child: Icon(icon, color: Colors.white, size: 28),
+          ),
+          const SizedBox(height: 8),
+          Text(label, style: const TextStyle(fontWeight: FontWeight.w600)),
+        ],
       ),
     );
   }
