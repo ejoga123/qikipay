@@ -11,8 +11,7 @@ class SignupScreen extends StatefulWidget {
   State<SignupScreen> createState() => _SignupScreenState();
 }
 
-class _SignupScreenState extends State<SignupScreen>
-    with TickerProviderStateMixin {
+class _SignupScreenState extends State<SignupScreen> with TickerProviderStateMixin {
   late final AnimationController _fadeController;
   late final Animation<double> _fadeAnimation;
 
@@ -100,13 +99,10 @@ class _SignupScreenState extends State<SignupScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: const Color(0xFF121212), // dark background
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(
-            horizontal: AppPadding.horizontal,
-            vertical: 48,
-          ),
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 48),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -115,9 +111,9 @@ class _SignupScreenState extends State<SignupScreen>
                 child: const Text(
                   "Create Account 📝",
                   style: TextStyle(
-                    fontSize: AppFontSizes.headline,
+                    fontSize: 28,
                     fontWeight: FontWeight.bold,
-                    color: AppColors.dark,
+                    color: Colors.white,
                   ),
                 ),
               ),
@@ -125,33 +121,63 @@ class _SignupScreenState extends State<SignupScreen>
               TextField(
                 controller: _emailController,
                 keyboardType: TextInputType.emailAddress,
-                style: const TextStyle(color: Colors.black),
+                style: const TextStyle(color: Colors.white70),
                 decoration: const InputDecoration(
                   labelText: "Email",
-                  labelStyle: TextStyle(color: Colors.grey),
-                  border: OutlineInputBorder(),
+                  labelStyle: TextStyle(color: Colors.white54),
+                  filled: true,
+                  fillColor: Colors.transparent,
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.white24),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.white24),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.white70),
+                  ),
                 ),
               ),
               const SizedBox(height: 16),
               TextField(
                 controller: _passwordController,
                 obscureText: true,
-                style: const TextStyle(color: Colors.black),
+                style: const TextStyle(color: Colors.white70),
                 decoration: const InputDecoration(
                   labelText: "Password",
-                  labelStyle: TextStyle(color: Colors.grey),
-                  border: OutlineInputBorder(),
+                  labelStyle: TextStyle(color: Colors.white54),
+                  filled: true,
+                  fillColor: Colors.transparent,
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.white24),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.white24),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.white70),
+                  ),
                 ),
               ),
               const SizedBox(height: 16),
               TextField(
                 controller: _confirmController,
                 obscureText: true,
-                style: const TextStyle(color: Colors.black),
+                style: const TextStyle(color: Colors.white70),
                 decoration: const InputDecoration(
                   labelText: "Confirm Password",
-                  labelStyle: TextStyle(color: Colors.grey),
-                  border: OutlineInputBorder(),
+                  labelStyle: TextStyle(color: Colors.white54),
+                  filled: true,
+                  fillColor: Colors.transparent,
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.white24),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.white24),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.white70),
+                  ),
                 ),
               ),
               const SizedBox(height: 24),
@@ -166,10 +192,10 @@ class _SignupScreenState extends State<SignupScreen>
                   onPressed: () => Navigator.pop(context),
                   child: const Text(
                     "Already have an account? Log in",
-                    style: TextStyle(color: AppColors.dark),
+                    style: TextStyle(color: Colors.white70),
                   ),
                 ),
-              )
+              ),
             ],
           ),
         ),

@@ -12,8 +12,7 @@ class LoginScreen extends StatefulWidget {
   State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen>
-    with TickerProviderStateMixin {
+class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin {
   late final AnimationController _controller;
   late final Animation<double> _fadeIn;
   final TextEditingController _emailController = TextEditingController();
@@ -90,13 +89,12 @@ class _LoginScreenState extends State<LoginScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: const Color(0xFF121212), // dark background
       body: SafeArea(
         child: FadeTransition(
           opacity: _fadeIn,
           child: SingleChildScrollView(
-            padding:
-                const EdgeInsets.symmetric(horizontal: AppPadding.horizontal),
+            padding: const EdgeInsets.symmetric(horizontal: 24),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -104,27 +102,51 @@ class _LoginScreenState extends State<LoginScreen>
                 const Text(
                   "Welcome Back 👋",
                   style: TextStyle(
-                    fontSize: AppFontSizes.headline,
+                    fontSize: 28,
                     fontWeight: FontWeight.bold,
-                    color: AppColors.dark,
+                    color: Colors.white,
                   ),
                 ),
                 const SizedBox(height: 20),
                 TextField(
                   controller: _emailController,
+                  keyboardType: TextInputType.emailAddress,
+                  style: const TextStyle(color: Colors.white70),
                   decoration: const InputDecoration(
                     labelText: "Email",
-                    border: OutlineInputBorder(),
+                    labelStyle: TextStyle(color: Colors.white54),
+                    filled: true,
+                    fillColor: Colors.transparent,
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.white24),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.white24),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.white70),
+                    ),
                   ),
-                  keyboardType: TextInputType.emailAddress,
                 ),
                 const SizedBox(height: 16),
                 TextField(
                   controller: _passwordController,
                   obscureText: true,
+                  style: const TextStyle(color: Colors.white70),
                   decoration: const InputDecoration(
                     labelText: "Password",
-                    border: OutlineInputBorder(),
+                    labelStyle: TextStyle(color: Colors.white54),
+                    filled: true,
+                    fillColor: Colors.transparent,
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.white24),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.white24),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.white70),
+                    ),
                   ),
                 ),
                 const SizedBox(height: 8),
@@ -132,7 +154,10 @@ class _LoginScreenState extends State<LoginScreen>
                   alignment: Alignment.centerRight,
                   child: TextButton(
                     onPressed: _handlePasswordReset,
-                    child: const Text("Forgot password?"),
+                    child: const Text(
+                      "Forgot password?",
+                      style: TextStyle(color: Colors.white70),
+                    ),
                   ),
                 ),
                 const SizedBox(height: 24),
@@ -150,7 +175,10 @@ class _LoginScreenState extends State<LoginScreen>
                         MaterialPageRoute(builder: (_) => const SignupScreen()),
                       );
                     },
-                    child: const Text("Don't have an account? Sign up"),
+                    child: const Text(
+                      "Don't have an account? Sign up",
+                      style: TextStyle(color: Colors.white70),
+                    ),
                   ),
                 ),
               ],

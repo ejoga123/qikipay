@@ -47,7 +47,11 @@ class _PasswordResetScreenState extends State<PasswordResetScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Reset Password')),
+      backgroundColor: const Color(0xFF121212), // dark background
+      appBar: AppBar(
+        title: const Text('Reset Password'),
+        backgroundColor: const Color(0xFF121212),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(24.0),
         child: Form(
@@ -57,32 +61,56 @@ class _PasswordResetScreenState extends State<PasswordResetScreen> {
               const SizedBox(height: 32),
               const Text(
                 'Forgot your password?',
-                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
               ),
               const SizedBox(height: 16),
               const Text(
                 'Enter your registered email and we’ll send you a reset link.',
-                style: TextStyle(fontSize: 14, color: Colors.grey),
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.white60,
+                ),
               ),
               const SizedBox(height: 32),
               TextFormField(
                 controller: _emailController,
+                keyboardType: TextInputType.emailAddress,
+                style: const TextStyle(color: Colors.white70),
                 decoration: const InputDecoration(
                   labelText: 'Email',
-                  border: OutlineInputBorder(),
+                  labelStyle: TextStyle(color: Colors.white54),
+                  filled: true,
+                  fillColor: Colors.transparent,
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.white24),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.white24),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.white70),
+                  ),
                 ),
-                keyboardType: TextInputType.emailAddress,
-                validator: (value) => value != null && value.contains('@')
-                    ? null
-                    : 'Enter a valid email',
+                validator: (value) =>
+                    value != null && value.contains('@') ? null : 'Enter a valid email',
               ),
               const SizedBox(height: 32),
               isLoading
-                  ? const Center(child: CircularProgressIndicator())
+                  ? const Center(child: CircularProgressIndicator(color: Colors.white70))
                   : ElevatedButton.icon(
                       onPressed: _handleReset,
-                      icon: const Icon(Icons.email),
+                      icon: const Icon(Icons.email, color: Colors.white),
                       label: const Text('Send Reset Link'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white12,
+                        foregroundColor: Colors.white70,
+                        textStyle: const TextStyle(fontWeight: FontWeight.w600),
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                      ),
                     ),
             ],
           ),

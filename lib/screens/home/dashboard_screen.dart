@@ -5,6 +5,7 @@ import '../../models/transaction_model.dart';
 import '../../services/auth_service.dart';
 import '../../services/wallet_service.dart';
 import '../../services/transaction_service.dart';
+import 'send_money_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
