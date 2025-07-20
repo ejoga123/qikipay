@@ -95,10 +95,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
               children: [
                 InkWell(
                   onTap: () {
-                    Navigator.push(
-                      context,
+                    Navigator.of(context).push(
                       MaterialPageRoute(
-                          builder: (context) => const SendMoneyScreen()),
+                        builder: (context) => const SendMoneyScreen(),
+                      ),
                     );
                   },
                   child: _buildQuickAction(
@@ -110,10 +110,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ),
                 InkWell(
                   onTap: () {
-                    Navigator.push(
-                      context,
+                    Navigator.of(context).push(
                       MaterialPageRoute(
-                          builder: (context) => const ReceiveMoneyScreen()),
+                        builder: (context) => const ReceiveMoneyScreen(),
+                      ),
                     );
                   },
                   child: _buildQuickAction(
@@ -125,10 +125,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ),
                 InkWell(
                   onTap: () {
-                    Navigator.push(
-                      context,
+                    Navigator.of(context).push(
                       MaterialPageRoute(
-                          builder: (context) => const TopUpScreen()),
+                        builder: (context) => const TopUpScreen(),
+                      ),
                     );
                   },
                   child: _buildQuickAction(
