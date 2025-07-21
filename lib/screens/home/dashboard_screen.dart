@@ -232,6 +232,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ],
         ),
       ),
+      bottomNavigationBar: Container(
+        height: 50,
+        color: AppColors.primary,
+        alignment: Alignment.center,
+        child: const Text(
+          '© 2024 QikiPay. All rights reserved.',
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
+        ),
+      ),
     );
   }
 
