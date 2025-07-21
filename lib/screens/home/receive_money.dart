@@ -9,7 +9,18 @@ class ReceiveMoneyScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Receive Money')),
+      appBar: AppBar(
+        title: Row(
+          children: [
+            Image.asset(
+              'lib/assets/images/logo.png',
+              height: 30,
+            ),
+            const SizedBox(width: 8),
+            const Text('Receive Money'),
+          ],
+        ),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(24.0),
         child: Column(

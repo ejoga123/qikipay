@@ -63,6 +63,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       backgroundColor: Colors.white,
       body: Column(
         children: [
+          Image.asset(
+            'lib/assets/images/logo.png',
+            width: 80,
+            height: 80,
+          ),
+          const SizedBox(height: 16),
           Expanded(
             child: PageView.builder(
               controller: _controller,

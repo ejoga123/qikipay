@@ -35,7 +35,18 @@ class _SendMoneyScreenState extends State<SendMoneyScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Send Money')),
+      appBar: AppBar(
+        title: Row(
+          children: [
+            Image.asset(
+              'lib/assets/images/logo.png',
+              height: 30,
+            ),
+            const SizedBox(width: 8),
+            const Text('Send Money'),
+          ],
+        ),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(

@@ -32,7 +32,18 @@ class _TopUpScreenState extends State<TopUpScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Top Up Wallet')),
+      appBar: AppBar(
+        title: Row(
+          children: [
+            Image.asset(
+              'lib/assets/images/logo.png',
+              height: 30,
+            ),
+            const SizedBox(width: 8),
+            const Text('Top Up Wallet'),
+          ],
+        ),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(

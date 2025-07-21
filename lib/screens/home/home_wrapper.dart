@@ -42,9 +42,19 @@ class _HomeWrapperState extends State<HomeWrapper> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColors.primary,
-        title: Text(
-          _titles[_currentIndex],
-          style: const TextStyle(color: Colors.white),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(
+              'lib/assets/images/logo.png',
+              height: 30,
+            ),
+            const SizedBox(width: 8),
+            Text(
+              _titles[_currentIndex],
+              style: const TextStyle(color: Colors.white),
+            ),
+          ],
         ),
         centerTitle: true,
       ),

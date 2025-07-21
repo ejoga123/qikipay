@@ -33,8 +33,12 @@ class _SplashScreenState extends State<SplashScreen> {
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: const [
-              Icon(Icons.account_balance_wallet, size: 80, color: Colors.white),
+            children: [
+              Image.asset(
+                'lib/assets/images/logo.png',
+                width: 80,
+                height: 80,
+              ),
               SizedBox(height: 20),
               Text(
                 'QikiPay',

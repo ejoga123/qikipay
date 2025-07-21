@@ -15,7 +15,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Settings')),
+      appBar: AppBar(
+        title: Row(
+          children: [
+            Image.asset(
+              'lib/assets/images/logo.png',
+              height: 30,
+            ),
+            const SizedBox(width: 8),
+            const Text('Settings'),
+          ],
+        ),
+      ),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [

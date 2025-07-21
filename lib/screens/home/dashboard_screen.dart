@@ -8,6 +8,9 @@ import '../../services/transaction_service.dart';
 import 'send_money_screen.dart';
 import 'receive_money.dart';
 import 'top_up_screen.dart';
+import '../profile/profile_screen.dart';
+import '../support/support_screen.dart';
+import '../paybills/paybills_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -55,8 +58,17 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColors.primary,
-        title:
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(
+              'lib/assets/images/logo.png',
+              height: 30,
+            ),
+            const SizedBox(width: 8),
             const Text("QikiPay Wallet", style: TextStyle(color: Colors.white)),
+          ],
+        ),
         centerTitle: true,
       ),
       body: Padding(
@@ -137,7 +149,39 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ),
                 InkWell(
                   onTap: () {
-                    // TODO: Implement Pay Bills screen navigation
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const ProfileScreen(),
+                      ),
+                    );
+                  },
+                  child: _buildQuickAction(
+                    context,
+                    icon: Icons.person,
+                    label: 'Profile',
+                  ),
+                ),
+                InkWell(
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const SupportScreen(),
+                      ),
+                    );
+                  },
+                  child: _buildQuickAction(
+                    context,
+                    icon: Icons.support_agent,
+                    label: 'Support',
+                  ),
+                ),
+                InkWell(
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const PayBillsScreen(),
+                      ),
+                    );
                   },
                   child: _buildQuickAction(
                     context,

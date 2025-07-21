@@ -12,7 +12,8 @@ class LoginScreen extends StatefulWidget {
   State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin {
+class _LoginScreenState extends State<LoginScreen>
+    with TickerProviderStateMixin {
   late final AnimationController _controller;
   late final Animation<double> _fadeIn;
   final TextEditingController _emailController = TextEditingController();
@@ -99,6 +100,12 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: 40),
+                Image.asset(
+                  'lib/assets/images/logo.png',
+                  width: 80,
+                  height: 80,
+                ),
+                const SizedBox(height: 20),
                 const Text(
                   "Welcome Back 👋",
                   style: TextStyle(
