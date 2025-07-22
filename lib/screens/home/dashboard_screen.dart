@@ -5,6 +5,7 @@ import '../../models/transaction_model.dart';
 import '../../services/auth_service.dart';
 import '../../services/wallet_service.dart';
 import '../../services/transaction_service.dart';
+import '../auth/login_screen.dart';
 import 'send_money_screen.dart';
 import 'receive_money.dart';
 import 'top_up_screen.dart';
@@ -70,6 +71,20 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ],
         ),
         centerTitle: true,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout),
+            tooltip: 'Logout',
+            onPressed: () async {
+              await _authService.logout();
+              if (!mounted) return;
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (_) => const LoginScreen()),
+              );
+            },
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(AppPadding.horizontal),
