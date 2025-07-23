@@ -11,11 +11,14 @@ class _SendMoneyScreenState extends State<SendMoneyScreen> {
   final _formKey = GlobalKey<FormState>();
   final _recipientController = TextEditingController();
   final _amountController = TextEditingController();
+  final _accountNumberController = TextEditingController();
+  String? _selectedBank;
 
   @override
   void dispose() {
     _recipientController.dispose();
     _amountController.dispose();
+    _accountNumberController.dispose();
     super.dispose();
   }
 
@@ -23,11 +26,16 @@ class _SendMoneyScreenState extends State<SendMoneyScreen> {
     if (_formKey.currentState!.validate()) {
       final recipient = _recipientController.text.trim();
       final amount = double.tryParse(_amountController.text.trim()) ?? 0.0;
+      final accountNumber = _accountNumberController.text.trim();
+      final bankName = _selectedBank ?? '';
 
       // TODO: Add transaction logic here
-      print('Sending ₦$amount to $recipient');
+      print(
+          'Sending ₦$amount to $recipient, Account: $accountNumber, Bank: $bankName');
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('₦$amount sent to $recipient')),
+        SnackBar(
+            content: Text(
+                '₦$amount sent to $recipient, Account: $accountNumber, Bank: $bankName')),
       );
     }
   }
@@ -59,6 +67,38 @@ class _SendMoneyScreenState extends State<SendMoneyScreen> {
                 validator: (value) => value == null || value.isEmpty
                     ? 'Enter recipient ID'
                     : null,
+              ),
+              const SizedBox(height: 16),
+              TextFormField(
+                controller: _accountNumberController,
+                decoration: const InputDecoration(labelText: 'Account Number'),
+                keyboardType: TextInputType.number,
+                validator: (value) => value == null || value.isEmpty
+                    ? 'Enter account number'
+                    : null,
+              ),
+              const SizedBox(height: 16),
+              DropdownButtonFormField<String>(
+                decoration: const InputDecoration(labelText: 'Select Bank'),
+                value: _selectedBank,
+                items: <String>[
+                  'Bank A',
+                  'Bank B',
+                  'Bank C',
+                  'Bank D',
+                ].map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+                onChanged: (String? newValue) {
+                  setState(() {
+                    _selectedBank = newValue;
+                  });
+                },
+                validator: (value) =>
+                    value == null || value.isEmpty ? 'Select a bank' : null,
               ),
               const SizedBox(height: 16),
               TextFormField(

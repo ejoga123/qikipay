@@ -11,13 +11,20 @@ class SignupScreen extends StatefulWidget {
   State<SignupScreen> createState() => _SignupScreenState();
 }
 
-class _SignupScreenState extends State<SignupScreen> with TickerProviderStateMixin {
+class _SignupScreenState extends State<SignupScreen>
+    with TickerProviderStateMixin {
   late final AnimationController _fadeController;
   late final Animation<double> _fadeAnimation;
 
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmController = TextEditingController();
+
+  final TextEditingController _firstNameController = TextEditingController();
+  final TextEditingController _sureNameController = TextEditingController();
+  final TextEditingController _phoneNumberController = TextEditingController();
+  final TextEditingController _addressController = TextEditingController();
+
   final AuthService _authService = AuthService();
 
   bool _isLoading = false;
@@ -41,7 +48,18 @@ class _SignupScreenState extends State<SignupScreen> with TickerProviderStateMix
     final password = _passwordController.text.trim();
     final confirmPassword = _confirmController.text.trim();
 
-    if (email.isEmpty || password.isEmpty || confirmPassword.isEmpty) {
+    final firstName = _firstNameController.text.trim();
+    final sureName = _sureNameController.text.trim();
+    final phoneNumber = _phoneNumberController.text.trim();
+    final address = _addressController.text.trim();
+
+    if (email.isEmpty ||
+        password.isEmpty ||
+        confirmPassword.isEmpty ||
+        firstName.isEmpty ||
+        sureName.isEmpty ||
+        phoneNumber.isEmpty ||
+        address.isEmpty) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("All fields are required")),
@@ -67,7 +85,14 @@ class _SignupScreenState extends State<SignupScreen> with TickerProviderStateMix
 
     setState(() => _isLoading = true);
 
-    final user = await _authService.registerWithEmail(email, password);
+    final user = await _authService.registerWithEmailAndProfile(
+      email,
+      password,
+      firstName,
+      sureName,
+      phoneNumber,
+      address,
+    );
 
     if (!mounted) return;
     setState(() => _isLoading = false);
@@ -166,6 +191,87 @@ class _SignupScreenState extends State<SignupScreen> with TickerProviderStateMix
                 style: const TextStyle(color: Colors.white70),
                 decoration: const InputDecoration(
                   labelText: "Confirm Password",
+                  labelStyle: TextStyle(color: Colors.white54),
+                  filled: true,
+                  fillColor: Colors.transparent,
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.white24),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.white24),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.white70),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 24),
+              TextField(
+                controller: _firstNameController,
+                style: const TextStyle(color: Colors.white70),
+                decoration: const InputDecoration(
+                  labelText: "First Name",
+                  labelStyle: TextStyle(color: Colors.white54),
+                  filled: true,
+                  fillColor: Colors.transparent,
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.white24),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.white24),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.white70),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+              TextField(
+                controller: _sureNameController,
+                style: const TextStyle(color: Colors.white70),
+                decoration: const InputDecoration(
+                  labelText: "Sure Name",
+                  labelStyle: TextStyle(color: Colors.white54),
+                  filled: true,
+                  fillColor: Colors.transparent,
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.white24),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.white24),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.white70),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+              TextField(
+                controller: _phoneNumberController,
+                keyboardType: TextInputType.phone,
+                style: const TextStyle(color: Colors.white70),
+                decoration: const InputDecoration(
+                  labelText: "Phone Number",
+                  labelStyle: TextStyle(color: Colors.white54),
+                  filled: true,
+                  fillColor: Colors.transparent,
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.white24),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.white24),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.white70),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+              TextField(
+                controller: _addressController,
+                style: const TextStyle(color: Colors.white70),
+                decoration: const InputDecoration(
+                  labelText: "Address",
                   labelStyle: TextStyle(color: Colors.white54),
                   filled: true,
                   fillColor: Colors.transparent,
