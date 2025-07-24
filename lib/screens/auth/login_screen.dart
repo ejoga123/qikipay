@@ -21,6 +21,7 @@ class _LoginScreenState extends State<LoginScreen>
   final AuthService _authService = AuthService();
 
   bool _isLoading = false;
+  bool _obscurePassword = true;
 
   @override
   void initState() {
@@ -138,21 +139,32 @@ class _LoginScreenState extends State<LoginScreen>
                 const SizedBox(height: 16),
                 TextField(
                   controller: _passwordController,
-                  obscureText: true,
+                  obscureText: _obscurePassword,
                   style: const TextStyle(color: Colors.white70),
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                     labelText: "Password",
-                    labelStyle: TextStyle(color: Colors.white54),
+                    labelStyle: const TextStyle(color: Colors.white54),
                     filled: true,
                     fillColor: Colors.transparent,
-                    border: OutlineInputBorder(
+                    border: const OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.white24),
                     ),
-                    enabledBorder: OutlineInputBorder(
+                    enabledBorder: const OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.white24),
                     ),
-                    focusedBorder: OutlineInputBorder(
+                    focusedBorder: const OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.white70),
+                    ),
+                    suffix: TextButton(
+                      onPressed: () {
+                        setState(() {
+                          _obscurePassword = !_obscurePassword;
+                        });
+                      },
+                      child: Text(
+                        _obscurePassword ? 'show' : 'hide',
+                        style: const TextStyle(color: Colors.white70),
+                      ),
                     ),
                   ),
                 ),
