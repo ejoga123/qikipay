@@ -1,43 +1,42 @@
 import 'package:flutter/material.dart';
 
-class PayBillsScreen extends StatefulWidget {
-  const PayBillsScreen({super.key});
+class BuyRechargeCardScreen extends StatefulWidget {
+  const BuyRechargeCardScreen({super.key});
 
   @override
-  State<PayBillsScreen> createState() => _PayBillsScreenState();
+  State<BuyRechargeCardScreen> createState() => _BuyRechargeCardScreenState();
 }
 
-class _PayBillsScreenState extends State<PayBillsScreen> {
-  final Map<String, bool> _billCategories = {
-    'Electricity': false,
-    'Waste Bill': false,
-    'Product and Services': false,
-    'School & Exam': false,
-    'Internet Service': false,
+class _BuyRechargeCardScreenState extends State<BuyRechargeCardScreen> {
+  final Map<String, bool> _rechargeOptions = {
+    '₦500 Recharge Card': false,
+    '₦1000 Recharge Card': false,
+    '₦2000 Recharge Card': false,
+    '₦5000 Recharge Card': false,
   };
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Pay Bills'),
+        title: const Text('Buy Recharge Card'),
         centerTitle: true,
       ),
       body: ListView(
         padding: const EdgeInsets.all(16.0),
         children: [
           const Text(
-            'Select bills to pay:',
+            'Select recharge card(s) to buy:',
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 12),
-          ..._billCategories.keys.map((category) {
+          ..._rechargeOptions.keys.map((option) {
             return CheckboxListTile(
-              title: Text(category),
-              value: _billCategories[category],
+              title: Text(option),
+              value: _rechargeOptions[option],
               onChanged: (bool? value) {
                 setState(() {
-                  _billCategories[category] = value ?? false;
+                  _rechargeOptions[option] = value ?? false;
                 });
               },
             );
@@ -45,18 +44,17 @@ class _PayBillsScreenState extends State<PayBillsScreen> {
           const SizedBox(height: 20),
           ElevatedButton(
             onPressed: () {
-              final selectedBills = _billCategories.entries
+              final selectedOptions = _rechargeOptions.entries
                   .where((entry) => entry.value)
                   .map((entry) => entry.key)
                   .toList();
-              // For now, just show selected bills in a dialog
               showDialog(
                 context: context,
                 builder: (context) => AlertDialog(
-                  title: const Text('Selected Bills'),
-                  content: Text(selectedBills.isNotEmpty
-                      ? selectedBills.join(', ')
-                      : 'No bills selected'),
+                  title: const Text('Selected Recharge Cards'),
+                  content: Text(selectedOptions.isNotEmpty
+                      ? selectedOptions.join(', ')
+                      : 'No recharge cards selected'),
                   actions: [
                     TextButton(
                       onPressed: () => Navigator.of(context).pop(),

@@ -1,43 +1,42 @@
 import 'package:flutter/material.dart';
 
-class PayBillsScreen extends StatefulWidget {
-  const PayBillsScreen({super.key});
+class BuyDataScreen extends StatefulWidget {
+  const BuyDataScreen({super.key});
 
   @override
-  State<PayBillsScreen> createState() => _PayBillsScreenState();
+  State<BuyDataScreen> createState() => _BuyDataScreenState();
 }
 
-class _PayBillsScreenState extends State<PayBillsScreen> {
-  final Map<String, bool> _billCategories = {
-    'Electricity': false,
-    'Waste Bill': false,
-    'Product and Services': false,
-    'School & Exam': false,
-    'Internet Service': false,
+class _BuyDataScreenState extends State<BuyDataScreen> {
+  final Map<String, bool> _dataPlans = {
+    '500MB Data Plan': false,
+    '1GB Data Plan': false,
+    '2GB Data Plan': false,
+    '5GB Data Plan': false,
   };
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Pay Bills'),
+        title: const Text('Buy Data Plan'),
         centerTitle: true,
       ),
       body: ListView(
         padding: const EdgeInsets.all(16.0),
         children: [
           const Text(
-            'Select bills to pay:',
+            'Select data plan(s) to buy:',
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 12),
-          ..._billCategories.keys.map((category) {
+          ..._dataPlans.keys.map((plan) {
             return CheckboxListTile(
-              title: Text(category),
-              value: _billCategories[category],
+              title: Text(plan),
+              value: _dataPlans[plan],
               onChanged: (bool? value) {
                 setState(() {
-                  _billCategories[category] = value ?? false;
+                  _dataPlans[plan] = value ?? false;
                 });
               },
             );
@@ -45,18 +44,17 @@ class _PayBillsScreenState extends State<PayBillsScreen> {
           const SizedBox(height: 20),
           ElevatedButton(
             onPressed: () {
-              final selectedBills = _billCategories.entries
+              final selectedPlans = _dataPlans.entries
                   .where((entry) => entry.value)
                   .map((entry) => entry.key)
                   .toList();
-              // For now, just show selected bills in a dialog
               showDialog(
                 context: context,
                 builder: (context) => AlertDialog(
-                  title: const Text('Selected Bills'),
-                  content: Text(selectedBills.isNotEmpty
-                      ? selectedBills.join(', ')
-                      : 'No bills selected'),
+                  title: const Text('Selected Data Plans'),
+                  content: Text(selectedPlans.isNotEmpty
+                      ? selectedPlans.join(', ')
+                      : 'No data plans selected'),
                   actions: [
                     TextButton(
                       onPressed: () => Navigator.of(context).pop(),

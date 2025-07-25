@@ -12,6 +12,8 @@ import 'top_up_screen.dart';
 import '../profile/profile_screen.dart';
 import '../support/support_screen.dart';
 import '../paybills/paybills_screen.dart';
+import '../recharge/buy_recharge_card_screen.dart';
+import '../recharge/buy_data_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -160,6 +162,34 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     context,
                     icon: Icons.add_card,
                     label: 'Top Up',
+                  ),
+                ),
+                InkWell(
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const BuyRechargeCardScreen(),
+                      ),
+                    );
+                  },
+                  child: _buildQuickAction(
+                    context,
+                    icon: Icons.phone_iphone,
+                    label: 'Buy Recharge Card',
+                  ),
+                ),
+                InkWell(
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const BuyDataScreen(),
+                      ),
+                    );
+                  },
+                  child: _buildQuickAction(
+                    context,
+                    icon: Icons.data_usage,
+                    label: 'Buy Data',
                   ),
                 ),
                 InkWell(
