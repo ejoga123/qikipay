@@ -160,7 +160,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         },
                         child: _buildQuickAction(
                           context,
-                          icon: Icons.send,
+                          iconPath: 'lib/assets/images/send_money.png',
                           label: 'Send Money',
                         ),
                       ),
@@ -174,7 +174,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         },
                         child: _buildQuickAction(
                           context,
-                          icon: Icons.call_received,
+                          iconPath: 'lib/assets/images/receive_money.png',
                           label: 'Receive Money',
                         ),
                       ),
@@ -188,7 +188,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         },
                         child: _buildQuickAction(
                           context,
-                          icon: Icons.add_card,
+                          iconPath: 'lib/assets/images/top_up.png',
                           label: 'Top Up',
                         ),
                       ),
@@ -203,7 +203,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         },
                         child: _buildQuickAction(
                           context,
-                          icon: Icons.phone_iphone,
+                          iconPath: 'lib/assets/images/recharge_card.png',
                           label: 'Buy Recharge Card',
                         ),
                       ),
@@ -223,7 +223,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         },
                         child: _buildQuickAction(
                           context,
-                          icon: Icons.data_usage,
+                          iconPath: 'lib/assets/images/data.png',
                           label: 'Buy Data',
                         ),
                       ),
@@ -237,7 +237,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         },
                         child: _buildQuickAction(
                           context,
-                          icon: Icons.person,
+                          iconPath: 'lib/assets/images/profile.png',
                           label: 'Profile',
                         ),
                       ),
@@ -251,7 +251,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         },
                         child: _buildQuickAction(
                           context,
-                          icon: Icons.support_agent,
+                          iconPath: 'lib/assets/images/support.png',
                           label: 'Support',
                         ),
                       ),
@@ -265,7 +265,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         },
                         child: _buildQuickAction(
                           context,
-                          icon: Icons.receipt_long,
+                          iconPath: 'lib/assets/images/pay_bills.png',
                           label: 'Pay Bills',
                         ),
                       ),
@@ -333,13 +333,20 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   Widget _buildQuickAction(BuildContext context,
-      {required IconData icon, required String label}) {
+      {required String iconPath, required String label}) {
     return Column(
       children: [
         CircleAvatar(
           radius: 28,
           backgroundColor: AppColors.primary,
-          child: Icon(icon, color: Colors.white, size: 28),
+          child: Padding(
+            padding: const EdgeInsets.all(6.0),
+            child: Image.asset(
+              iconPath,
+              color: Colors.white,
+              fit: BoxFit.contain,
+            ),
+          ),
         ),
         const SizedBox(height: 8),
         Text(label, style: const TextStyle(fontWeight: FontWeight.w600)),

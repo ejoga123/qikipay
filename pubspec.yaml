@@ -45,6 +45,7 @@ dependencies:
   logger: ^1.1.0
   http: ^1.4.0
   qr_flutter: ^4.0.0
+  mockito: ^5.5.0
 
 dev_dependencies:
   flutter_test:
@@ -56,4 +57,4 @@ dev_dependencies:
 flutter:
   assets:
     - lib/assets/images/logo.png
-    
+    - lib/assets/images/

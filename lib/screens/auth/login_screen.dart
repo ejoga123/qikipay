@@ -108,10 +108,10 @@ class _LoginScreenState extends State<LoginScreen>
                 ),
                 const SizedBox(height: 20),
                 const Text(
-                  "Welcome Back 👋",
+                  "Welcome to QikiPay\nEmpower your money — effortlessly.\nSend, receive, and manage your funds with confidence.\nJoin thousands making smart financial moves in seconds — secure, simple, and lightning-fast",
                   style: TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                    fontWeight: FontWeight.normal,
                     color: Colors.white,
                   ),
                 ),
