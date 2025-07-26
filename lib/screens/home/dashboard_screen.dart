@@ -325,7 +325,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         color: AppColors.primary,
         alignment: Alignment.center,
         child: const Text(
-          '© 2024 QikiPay. All rights reserved.',
+          '© 2025 QikiPay. All rights reserved.',
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
         ),
       ),

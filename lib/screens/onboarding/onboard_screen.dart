@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'splash_screen.dart'; // Replace with your actual next screen
+import '../splash_screen.dart'; // Corrected import path
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});

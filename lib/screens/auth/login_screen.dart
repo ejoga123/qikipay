@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../../widgets/custom_button.dart';
-import '../../config/constants.dart';
 import '../../services/auth_service.dart';
 import '../auth/signup_screen.dart';
 import '../home/dashboard_screen.dart';
