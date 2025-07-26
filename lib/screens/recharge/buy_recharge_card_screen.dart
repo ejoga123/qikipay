@@ -9,6 +9,8 @@ class BuyRechargeCardScreen extends StatefulWidget {
 
 class _BuyRechargeCardScreenState extends State<BuyRechargeCardScreen> {
   final Map<String, bool> _rechargeOptions = {
+    '₦100 Recharge Card': false,
+    '₦200 Recharge Card': false,
     '₦500 Recharge Card': false,
     '₦1000 Recharge Card': false,
     '₦2000 Recharge Card': false,
@@ -18,10 +20,12 @@ class _BuyRechargeCardScreenState extends State<BuyRechargeCardScreen> {
   final List<String> _networkProviders = ['Airtel', 'MTN', 'Glo', '9mobil'];
   String? _selectedProvider;
   final TextEditingController _phoneController = TextEditingController();
+  final TextEditingController _customAmountController = TextEditingController();
 
   @override
   void dispose() {
     _phoneController.dispose();
+    _customAmountController.dispose();
     super.dispose();
   }
 
@@ -86,6 +90,19 @@ class _BuyRechargeCardScreenState extends State<BuyRechargeCardScreen> {
             );
           }).toList(),
           const SizedBox(height: 20),
+          const Text(
+            'Or enter a custom amount:',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+          TextField(
+            controller: _customAmountController,
+            keyboardType: TextInputType.number,
+            decoration: const InputDecoration(
+              border: OutlineInputBorder(),
+              hintText: 'Enter custom amount',
+            ),
+          ),
+          const SizedBox(height: 20),
           ElevatedButton(
             onPressed: () {
               if (_selectedProvider == null || _phoneController.text.isEmpty) {
@@ -109,13 +126,37 @@ class _BuyRechargeCardScreenState extends State<BuyRechargeCardScreen> {
                   .where((entry) => entry.value)
                   .map((entry) => entry.key)
                   .toList();
+              final customAmount = _customAmountController.text.trim();
+              if (selectedOptions.isEmpty && customAmount.isEmpty) {
+                showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: const Text('No Selection'),
+                    content: const Text(
+                        'Please select at least one recharge card or enter a custom amount.'),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.of(context).pop(),
+                        child: const Text('OK'),
+                      ),
+                    ],
+                  ),
+                );
+                return;
+              }
+              String contentMessage =
+                  "Provider: $_selectedProvider\nPhone: ${_phoneController.text}\n";
+              if (selectedOptions.isNotEmpty) {
+                contentMessage += "Cards: ${selectedOptions.join(', ')}\n";
+              }
+              if (customAmount.isNotEmpty) {
+                contentMessage += "Custom Amount: ₦$customAmount";
+              }
               showDialog(
                 context: context,
                 builder: (context) => AlertDialog(
                   title: const Text('Selected Recharge Cards'),
-                  content: Text(selectedOptions.isNotEmpty
-                      ? "Provider: $_selectedProvider\nPhone: ${_phoneController.text}\nCards: ${selectedOptions.join(', ')}"
-                      : 'No recharge cards selected'),
+                  content: Text(contentMessage),
                   actions: [
                     TextButton(
                       onPressed: () => Navigator.of(context).pop(),
