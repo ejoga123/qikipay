@@ -1,1 +1,24 @@
-{"flutter":{"platforms":{"android":{"default":{"projectId":"qikipay","appId":"1:353705145888:android:7de9c17af3b0ed4a1fee45","fileOutput":"android/app/google-services.json"}},"dart":{"lib/firebase_options.dart":{"projectId":"qikipay","configurations":{"android":"1:353705145888:android:7de9c17af3b0ed4a1fee45","ios":"1:353705145888:ios:80d882d096bbb4e51fee45","macos":"1:353705145888:ios:80d882d096bbb4e51fee45","web":"1:353705145888:web:b5dfc2f111f836b91fee45","windows":"1:353705145888:web:874d00f080e879591fee45"}}}}}}
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "qikipay",
+          "appId": "1:353705145888:android:7de9c17af3b0ed4a1fee45",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "qikipay",
+          "configurations": {
+            "android": "1:353705145888:android:7de9c17af3b0ed4a1fee45",
+            "ios": "1:353705145888:ios:80d882d096bbb4e51fee45",
+            "macos": "1:353705145888:ios:80d882d096bbb4e51fee45",
+            "windows": "1:353705145888:windows:874d00f080e879591fee45"
+          }
+        }
+      }
+    }
+  }
+}
