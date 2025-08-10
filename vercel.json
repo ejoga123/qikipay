@@ -1,3 +1,5 @@
-{
-  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
-}
+# Exclude everything except build/web
+*
+!build/web/**
+!vercel.json
+!package.json
